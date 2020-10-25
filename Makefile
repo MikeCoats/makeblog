@@ -11,13 +11,16 @@ all: posts
 clean:
 	rm --recursive --force site/
 
-# These are the posts we want to build.
-POST_FILES := site/test-post-1/index.html site/test-post-2/index.html
+# These are the markdown versions of the posts.
+POST_SRC_FILES := $(wildcard posts/*.md)
+
+# These are the html versions of the posts.
+POST_DST_FILES := $(patsubst posts/%.md, site/%/index.html, $(POST_SRC_FILES))
 
 # Post building instructions.
-$(POST_FILES) : site/%/index.html : posts/%.md
+$(POST_DST_FILES) : site/%/index.html : posts/%.md
 	mkdir --parents $(dir $@)
 	markdown $< > $@
 
 # Target to build the posts.
-posts: $(POST_FILES)
+posts: $(POST_DST_FILES)
