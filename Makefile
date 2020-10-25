@@ -1,15 +1,21 @@
-# `posts` is a build target, but also a location in our build tree, so we'd
-# better mark it as phony. `all` and `clean` are also marked, but more out of a,
+# `assets` and `posts` are build targets, but also locations in our tree, so
+# better mark as phony. `all` and `clean` are also marked, but more out of a,
 # possibly, cargo-cultish habit.
-.PHONY: all clean posts
+.PHONY: all clean assets posts
 
 # Default action. Build everything.
-all: posts
+all: assets posts
 
 # All the output is contained in a single directory, so cleaning is as simple as
 # deleting that directory and all its contents.
 clean:
 	rm --recursive --force site/
+
+site/assets/:
+	mkdir --parents site/assets/
+	cp --recursive ./assets/* site/assets/
+
+assets: site/assets/
 
 # These are the markdown versions of the posts.
 POST_SRC_FILES := $(wildcard posts/*.md)
