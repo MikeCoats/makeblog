@@ -11,15 +11,13 @@ all: posts
 clean:
 	rm --recursive --force site/
 
-# These are the posts we want to transform.
-posts: site/test-post-1/index.html site/test-post-2/index.html
+# These are the posts we want to build.
+POST_FILES := site/test-post-1/index.html site/test-post-2/index.html
 
-# Transform one post from Markdown to HTML
-site/test-post-1/index.html : posts/test-post-1.md
-	mkdir --parents site/test-post-1
+# Post building instructions.
+$(POST_FILES) : site/%/index.html : posts/%.md
+	mkdir --parents $(dir $@)
 	markdown $< > $@
 
-# Transform a second post from Markdown to HTML
-site/test-post-2/index.html : posts/test-post-2.md
-	mkdir --parents site/test-post-2
-	markdown $< > $@
+# Target to build the posts.
+posts: $(POST_FILES)
