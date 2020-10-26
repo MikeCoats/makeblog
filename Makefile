@@ -30,8 +30,13 @@ POST_DST_FILES := $(patsubst posts/%.md, site/%/index.html, $(POST_SRC_FILES))
 
 # Post building instructions.
 $(POST_DST_FILES) : site/%/index.html : posts/%.md
+	@# Make the directory for the pretty-print URL.
 	mkdir --parents $(dir $@)
-	markdown $< > $@
+
+	@# Render the markdown, wrap it in a full page of HTML+CSS, then save it.
+	markdown $< \
+	| templates/post.html \
+	> $@
 
 # Target to build the posts.
 posts: $(POST_DST_FILES)

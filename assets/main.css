@@ -1,9 +1,63 @@
-* {
+body {
+  max-width:  65ch;
+  margin-left: auto;
+  margin-right: auto;
+
+  font-size: 18px;
+  line-height: 1.5em;
   font-family: monospace;
   color: #222;
 }
 
 h1::before {
   content: '# ';
+  color: #ccc;
+}
+
+h2::before {
+  content: '## ';
+  color: #ccc;
+}
+
+h3::before {
+  content: '### ';
+  color: #ccc;
+}
+
+blockquote > p::before {
+  content: '> ';
+  color: #ccc;
+}
+
+ul > li {
+  list-style: none;
+}
+
+ul > li::before {
+  content: '-';
+  color: #ccc;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+  font-weight: bold;
+}
+
+a::before {
+  content: '[';
+  color: #ccc;
+}
+
+a::after {
+  content: '](...)';
+  color: #ccc;
+}
+
+strong::before, strong::after {
+  content: '**';
+  color: #ccc;
+}
+
+em::before, em::after {
+  content: '_';
   color: #ccc;
 }
