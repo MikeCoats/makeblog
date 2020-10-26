@@ -40,3 +40,6 @@ $(POST_DST_FILES) : site/%/index.html : posts/%.md
 
 # Target to build the posts.
 posts: $(POST_DST_FILES)
+
+# Include any extra make commands or helpers we have.
+include extras/*.mk
