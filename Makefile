@@ -11,16 +11,21 @@ all: assets posts
 clean:
 	rm --recursive --force site/
 
+# Making our assets target is as simple as creating the directory to hold the
+# assets, then copying them in to place.
 site/assets/:
 	mkdir --parents site/assets/
 	cp --recursive ./assets/* site/assets/
 
+# A 'shortcut' target that's nicer to type than the full directory name.
 assets: site/assets/
 
 # These are the markdown versions of the posts.
 POST_SRC_FILES := $(wildcard posts/*.md)
 
-# These are the html versions of the posts.
+# These are the html versions of the posts. This and the `%` wildcard in the
+# static pattern rule below, allow for 'pretty-urls' like `/test-post` instead
+# of `/test-post.html`.
 POST_DST_FILES := $(patsubst posts/%.md, site/%/index.html, $(POST_SRC_FILES))
 
 # Post building instructions.
