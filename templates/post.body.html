@@ -1,0 +1,12 @@
+#!/bin/bash
+
+CONTENT=$(tee)
+
+cat << END_OF_TEMPLATE
+  <body>
+    <article>
+$CONTENT
+    </article>
+  </body>
+</html>
+END_OF_TEMPLATE

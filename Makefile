@@ -7,9 +7,11 @@
 all: assets posts
 
 # All the output is contained in a single directory, so cleaning is as simple as
-# deleting that directory and all its contents.
+# deleting that directory and all its contents. We should also delete our
+# temporary build directory too.
 clean:
 	rm --recursive --force site/
+	rm --recursive --force build/
 
 # Making our assets target is as simple as creating the directory to hold the
 # assets, then copying them in to place.
@@ -33,10 +35,20 @@ $(POST_DST_FILES) : site/%/index.html : posts/%.md
 	@# Make the directory for the pretty-print URL.
 	mkdir --parents $(dir $@)
 
-	@# Render the markdown, wrap it in a full page of HTML+CSS, then save it.
-	markdown $< \
-	| templates/post.html \
-	> $@
+	@# Make the directory for the temporary build files.
+	mkdir --parents build/$<
+
+	@# Split the markdown file into the frontmatter and contents.
+	csplit --silent --elide-empty-files --prefix=build/$</ --digits=1 $< '/^---$$/' '{*}'
+
+	@# Parse and render the frontmatter into the page's header.
+	tail -n+2 build/$</0 | templates/post.head.html > build/$</head.html
+
+	@# Render the markdown into the page's body.
+	tail -n+2 build/$</1 | markdown | templates/post.body.html > build/$</body.html
+
+	@# Concatenate the two parts in to the final file.
+	cat build/$</head.html build/$</body.html > $@
 
 # Target to build the posts.
 posts: $(POST_DST_FILES)

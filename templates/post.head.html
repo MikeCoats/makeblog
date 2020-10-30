@@ -1,0 +1,22 @@
+#!/bin/bash
+
+declare -A headers
+
+mapfile -t lines <<< "$(tee)"
+for line in "${lines[@]}"
+do
+    IFS=': ' read -r key value <<< "$line"
+    headers+=([$key]=$value)
+done
+
+cat << END_OF_TEMPLATE
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../assets/main.css">  
+    <title>${headers[title]}</title>
+    <meta name="description" content="${headers[description]}">
+    <meta name="generator" content="Makeblog">
+    <meta name="keywords" content="${headers[categories]} ${headers[tags]}">
+  </head>
+END_OF_TEMPLATE
